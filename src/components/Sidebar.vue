@@ -20,6 +20,7 @@
         v-for="item in items"
         :key="item.title"
         link
+        :to="item.link"
       >
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
@@ -62,9 +63,9 @@ export default {
       selectedItem: 0,
       drawer: null,
       items: [
-        { title: 'Dashboard', icon: 'mdi-view-dashboard' },
-        { title: 'Account', icon: 'mdi-account-box' },
-        { title: 'Admin', icon: 'mdi-gavel' },
+        { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/' },
+        { title: 'Perfil', icon: 'mdi-account-box', link: '/perfil' },
+        { title: 'Sobre', icon: 'mdi-chat-alert-outline', link: '/about' }
       ],
     }
   },

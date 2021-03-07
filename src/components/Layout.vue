@@ -4,7 +4,7 @@
 
     <v-toolbar flat>
       <v-toolbar-title>
-        <span class="caption">Dashboard</span><br>Bloqueios
+        <span class="caption">CBJ v.1.0.0</span><br>{{ $route.name }}
       </v-toolbar-title>
       <v-app-bar
         flat
@@ -21,6 +21,7 @@
               fab
               color="purple lighten-4"
               elevation="0"
+              to="/"
             >
               <v-icon color="purple">mdi-currency-usd</v-icon>
             </v-btn>
@@ -31,18 +32,15 @@
               fab
               color="purple lighten-4"
               elevation="0"
+              to="/about"
             >
-              <v-icon color="indigo">mdi-file-chart</v-icon>
+              <v-icon color="indigo">mdi-chat-alert-outline</v-icon>
             </v-btn>
           </v-tab>
         </v-tabs>
       </v-app-bar>
 
       <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
-      </v-btn>
 
       <v-badge
         bordered
@@ -78,6 +76,13 @@ export default {
 
   data: () => ({
     tab: null
-  })
+  }),
+
+  watch: {
+    $route (route) {
+      this.tab = route.path === '/about' ? 1 : 0
+    }
+  }
+
 }
 </script>
