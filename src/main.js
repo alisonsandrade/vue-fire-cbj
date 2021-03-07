@@ -2,9 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
-// import './plugins/firebase'
 
 Vue.config.productionTip = false
+
+Vue.prototype.$eventBus = new Vue()
 
 new Vue({
   router,

@@ -18,7 +18,7 @@
           v-model="search"
           clearable
           @click:clear="clearSearch"
-        ></v-text-field>
+        />
 
         <v-btn
           icon
@@ -88,6 +88,12 @@
             v-if="index < items.length - 1"
             :key="index"
           ></v-divider>
+        </template>
+        <template v-if="filteredItems.length === 0">
+          <v-alert
+            type="warning"
+            class="ma-3"
+          >Nenhum registro encontrado!</v-alert>
         </template>
       </v-list>
     </v-card>
@@ -191,8 +197,14 @@ export default {
     overlay: false,
     snackbar: false,
     text: 'Registro salvo com sucesso',
-    objBloqueio: {}
+    objBloqueio: { status: 'Aguardando bloqueio ' }
   }),
+
+  created () {
+    this.$eventBus.$on('month', (mesAtual) => {
+      this.init(mesAtual)
+    })
+  },
 
   computed: {
     items: {
@@ -269,11 +281,19 @@ export default {
       this.dialog = true
     },
 
-    async init () {
+    async init (params) {
+      const mesAtual = new Date().toISOString().substr(0, 7)
+
       this.overlay = true
       try {
         const data = await BloqueioService.getBloqueios()
-        this.items = data
+        const dataFilter = data.filter(item => {
+          const dataRequisicaoFormatada = item.dataRequisicao.slice(0, 7)
+          if (moment(dataRequisicaoFormatada).isSame(params || mesAtual)) {
+            return item
+          }
+        })
+        this.items = dataFilter
         this.searchItem = this.items
       } catch (error) {
         console.log('error bloqueiolist', error)

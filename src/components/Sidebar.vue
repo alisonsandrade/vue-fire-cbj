@@ -71,7 +71,7 @@ export default {
 
   watch: {
     picker (value) {
-      console.log('picker', value)
+      this.$eventBus.$emit('month', value)
     }
   }
 }
