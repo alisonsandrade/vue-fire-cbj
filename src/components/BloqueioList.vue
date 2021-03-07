@@ -29,71 +29,66 @@
       </v-toolbar>
 
       <v-list two-line>
-        <v-list-item-group
-          v-model="selected"
-          active-class="pink--text"
-        >
-          <template v-for="(item, index) in filteredItems">
-            <v-list-item
-              :key="item._id"
-              @click.prevent="editBloqueio(item)"
-            >
-              <v-list-item-content>
-                <v-list-item-title>
-                  <span v-if="item.exequente">
-                    {{ item.exequente.join(', ') }} x
-                  </span>
-                  <span>
-                    {{ item.executado ? item.executado.join(', ') : '' }}
-                  </span>
-                </v-list-item-title>
+        <template v-for="(item, index) in filteredItems">
+          <v-list-item
+            :key="item._id"
+            @click.prevent="editBloqueio(item)"
+          >
+            <v-list-item-content>
+              <v-list-item-title>
+                <span v-if="item.exequente">
+                  {{ item.exequente.join(', ') }} x
+                </span>
+                <span>
+                  {{ item.executado ? item.executado.join(', ') : '' }}
+                </span>
+              </v-list-item-title>
 
-                <v-list-item-subtitle class="text--primary">
-                  Processo n.º: {{ item.numeroProcesso }} -
-                  Protocolo SISBAJUD n.º: {{ item.numeroProtocolo }}
-                </v-list-item-subtitle>
+              <v-list-item-subtitle class="text--primary">
+                Processo n.º: {{ item.numeroProcesso }} -
+                Protocolo SISBAJUD n.º: {{ item.numeroProtocolo }}
+              </v-list-item-subtitle>
 
-                <v-list-item-subtitle>
-                  <v-chip
-                    class="mt-1"
-                    color="deep-purple"
-                    outlined
-                    label
-                    small
-                  >
-                    R$ {{ item.valor }}
-                  </v-chip>
-                  <v-chip
-                    class="ml-2 mt-1"
-                    :color="colorStatus(item.status)"
-                    label
-                    text-color="white"
-                    small
-                  >
-                    {{ item.status }}
-                  </v-chip>
-                </v-list-item-subtitle>
-              </v-list-item-content>
+              <v-list-item-subtitle>
+                <v-chip
+                  class="mt-1"
+                  color="deep-purple"
+                  outlined
+                  label
+                  small
+                >
+                  R$ {{ item.valor }}
+                </v-chip>
+                <v-chip
+                  class="ml-2 mt-1"
+                  :color="colorStatus(item.status)"
+                  label
+                  text-color="white"
+                  small
+                >
+                  {{ item.status }}
+                </v-chip>
+              </v-list-item-subtitle>
+            </v-list-item-content>
 
-              <v-list-item-action>
-                <v-list-item-action-text>
-                  {{ item.dataBloqueio ? dayNow(item.dataBloqueio) : dayNow(item.dataRequisicao) }}
-                </v-list-item-action-text>
+            <v-list-item-action>
+              <v-list-item-action-text>
+                {{ item.dataBloqueio ? dayNow(item.dataBloqueio) : dayNow(item.dataRequisicao) }}
+              </v-list-item-action-text>
 
-                <MenuDrop
-                  :data="item"
-                  @reload="(init(), snackbar = true)"
-                />
+              <MenuDrop
+                :data="item"
+                @reload="(init(), snackbar = true)"
+              />
 
-              </v-list-item-action>
-            </v-list-item>
+            </v-list-item-action>
+          </v-list-item>
 
-            <v-divider
-              v-if="index < items.length - 1"
-              :key="index"
-            ></v-divider>
-          </template>
-        </v-list-item-group>
+          <v-divider
+            v-if="index < items.length - 1"
+            :key="index"
+          ></v-divider>
+        </template>
       </v-list>
     </v-card>
 
@@ -131,12 +126,12 @@
                   <v-list-item-title class="title mb-1 white--text">
                     Total Requisitado
                   </v-list-item-title>
-                  <v-list-item-subtitle class="white--text">R$ 8.520,50</v-list-item-subtitle>
+                  <v-list-item-subtitle class="white--text">{{ totalRequisitado }}</v-list-item-subtitle>
 
                   <v-list-item-title class="title mb-1 mt-2 white--text">
                     Total Bloqueado
                   </v-list-item-title>
-                  <v-list-item-subtitle class="white--text">R$ 3.500,25</v-list-item-subtitle>
+                  <v-list-item-subtitle class="white--text">{{ totalBloqueado }}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-card-text>
@@ -190,7 +185,6 @@ export default {
 
   data: () => ({
     search: '',
-    selected: [2],
     searchItem: [],
     itemsLocal: [],
     dialog: false,
@@ -208,6 +202,28 @@ export default {
       set (value) {
         if (value) this.itemsLocal = value
       }
+    },
+
+    totalRequisitado () {
+      const total = this.filteredItems.reduce((acc, currentValue) => {
+        if (currentValue.status.toLowerCase().includes('aguardando')) {
+          acc = acc + this.formatValor(currentValue.valor)
+        }
+        return acc
+      }, 0)
+
+      return total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+    },
+
+    totalBloqueado () {
+      const total = this.filteredItems.reduce((acc, currentValue) => {
+        if (currentValue.status.toLowerCase().includes('bloqueado')) {
+          acc = acc + this.formatValor(currentValue.valor)
+        }
+        return acc
+      }, 0)
+
+      return total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
     },
 
     filteredItems () {
@@ -263,6 +279,12 @@ export default {
         console.log('error bloqueiolist', error)
       } finally {
         this.overlay = false
+      }
+    },
+
+    formatValor (valor) {
+      if (valor) {
+        return parseFloat(valor.replaceAll('.', '').replace(',', '.'))
       }
     }
   }
