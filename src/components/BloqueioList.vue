@@ -104,7 +104,8 @@
     >
       <v-col
         cols="12"
-        sm="4"
+        sm="6"
+        md="4"
       >
         <v-hover
           v-slot="{ hover }"

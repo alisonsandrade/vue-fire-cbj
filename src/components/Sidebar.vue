@@ -1,9 +1,9 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
+    v-model="show"
     class="deep-purple accent-5"
     dark
-    permanent
+    :permanent="$vuetify.breakpoint.mdAndDown ? false : true"
     app
     width="320px"
   >
@@ -57,16 +57,31 @@
 export default {
   name: 'Sidebar',
 
+  props: {
+    value: Boolean
+  },
+
   data () {
     return {
       picker: new Date().toISOString().substr(0, 10), // Formato: 2021-03
       selectedItem: 0,
-      drawer: null,
+      drawer: false,
       items: [
         { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/' },
         { title: 'Perfil', icon: 'mdi-account-box', link: '/perfil' },
         { title: 'Sobre', icon: 'mdi-chat-alert-outline', link: '/about' }
       ],
+    }
+  },
+
+  computed: {
+    show: {
+      get () {
+        return this.value
+      },
+      set (value) {
+        if (!value) this.$emit('input', value)
+      }
     }
   },
 

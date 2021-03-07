@@ -1,8 +1,13 @@
 <template>
-  <v-container>
-    <Sidebar />
+  <v-container fluid>
+    <Sidebar v-model="drawer" />
 
     <v-toolbar flat>
+      <v-app-bar-nav-icon
+        v-if="$vuetify.breakpoint.mdAndDown"
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
+
       <v-toolbar-title>
         <span class="caption">CBJ v.1.0.0</span><br>{{ $route.name }}
       </v-toolbar-title>
@@ -57,7 +62,10 @@
 
     </v-toolbar>
 
-    <v-container class="ma-1">
+    <v-container
+      class="ma-1"
+      fluid
+    >
       <router-view>
         <!-- Rotas filhas -->
       </router-view>
@@ -75,7 +83,8 @@ export default {
   },
 
   data: () => ({
-    tab: null
+    tab: null,
+    drawer: false
   }),
 
   watch: {
