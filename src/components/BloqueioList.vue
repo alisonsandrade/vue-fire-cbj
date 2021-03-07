@@ -35,65 +35,56 @@
           multiple
         >
           <template v-for="(item, index) in filteredItems">
-            <v-list-item :key="item.title">
-              <template v-slot:default="{ active }">
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <span v-if="item.exequente">
-                      {{ item.exequente.join(', ') }} x
-                    </span>
-                    <span>
-                      {{ item.executado ? item.executado.join(', ') : '' }}
-                    </span>
-                  </v-list-item-title>
+            <v-list-item
+              :key="item._id"
+              @click.prevent="editBloqueio(item)"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  <span v-if="item.exequente">
+                    {{ item.exequente.join(', ') }} x
+                  </span>
+                  <span>
+                    {{ item.executado ? item.executado.join(', ') : '' }}
+                  </span>
+                </v-list-item-title>
 
-                  <v-list-item-subtitle class="text--primary">
-                    Processo n.º: {{ item.numeroProcesso }} -
-                    Protocolo SISBAJUD n.º: {{ item.numeroProtocolo }}
-                  </v-list-item-subtitle>
+                <v-list-item-subtitle class="text--primary">
+                  Processo n.º: {{ item.numeroProcesso }} -
+                  Protocolo SISBAJUD n.º: {{ item.numeroProtocolo }}
+                </v-list-item-subtitle>
 
-                  <v-list-item-subtitle>
-                    <v-chip
-                      class="mt-1"
-                      color="deep-purple"
-                      outlined
-                      label
-                      small
-                    >
-                      R$ {{ item.valor }}
-                    </v-chip>
-                    <v-chip
-                      class="ml-2 mt-1"
-                      color="info"
-                      label
-                      text-color="white"
-                      small
-                    >
-                      Aguardando ordem de bloqueio
-                    </v-chip>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-list-item-action-text>
-                    {{ item.dataRequisicao ? dayNow(item.dataRequisicao) : dayNow(item.dataBloqueio) }}
-                  </v-list-item-action-text>
-
-                  <v-icon
-                    v-if="!active"
-                    color="grey lighten-1"
+                <v-list-item-subtitle>
+                  <v-chip
+                    class="mt-1"
+                    color="deep-purple"
+                    outlined
+                    label
+                    small
                   >
-                    mdi-star-outline
-                  </v-icon>
-
-                  <v-icon
-                    v-else
-                    color="yellow darken-3"
+                    R$ {{ item.valor }}
+                  </v-chip>
+                  <v-chip
+                    class="ml-2 mt-1"
+                    color="info"
+                    label
+                    text-color="white"
+                    small
                   >
-                    mdi-star
-                  </v-icon>
-                </v-list-item-action>
-              </template>
+                    Aguardando ordem de bloqueio
+                  </v-chip>
+                </v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-list-item-action>
+                <v-list-item-action-text>
+                  {{ item.dataRequisicao ? dayNow(item.dataRequisicao) : dayNow(item.dataBloqueio) }}
+                </v-list-item-action-text>
+
+                <v-icon color="grey lighten-1">
+                  mdi-star-outline
+                </v-icon>
+              </v-list-item-action>
             </v-list-item>
 
             <v-divider
@@ -153,7 +144,31 @@
       </v-col>
     </v-row>
 
-    <FormBloqueio v-model="dialog" />
+    <FormBloqueio
+      v-model="dialog"
+      @reload="(init(), snackbar = true)"
+      :data="objBloqueio"
+    />
+
+    <v-snackbar
+      v-model="snackbar"
+      color="success"
+    >
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+    <v-overlay :value="overlay"></v-overlay>
 
   </div>
 </template>
@@ -176,7 +191,11 @@ export default {
     selected: [2],
     searchItem: [],
     itemsLocal: [],
-    dialog: false
+    dialog: false,
+    overlay: false,
+    snackbar: false,
+    text: 'Registro salvo com sucesso',
+    objBloqueio: {}
   }),
 
   computed: {
@@ -192,23 +211,20 @@ export default {
     filteredItems () {
       return this.searchItem.filter((item) => {
         return item.exequente.join(', ').toLowerCase().match(this.search) ||
+          item.executado.join(', ').toLowerCase().match(this.search) ||
           item.numeroProcesso.toLowerCase().match(this.search) ||
           item.numeroProtocolo.toLowerCase().match(this.search) ||
           item.status.toLowerCase().match(this.search)
-        // item.action.toLowerCase().match(this.search)
       })
     }
   },
 
   async mounted () {
-    // setTimeout(() => this.searchItem = this.items)
-
     this.init()
   },
 
   methods: {
     dayNow (date) {
-      console.log('dt', date)
       if (date) {
         return moment(new Date(date)).toNow()
       }
@@ -218,14 +234,21 @@ export default {
       this.search = ''
     },
 
+    editBloqueio (obj) {
+      this.objBloqueio = Object.assign({}, obj)
+      this.dialog = true
+    },
+
     async init () {
+      this.overlay = true
       try {
         const data = await BloqueioService.getBloqueios()
         this.items = data
         this.searchItem = this.items
-        console.log('items', this.items)
       } catch (error) {
         console.log('error bloqueiolist', error)
+      } finally {
+        this.overlay = false
       }
     }
   }

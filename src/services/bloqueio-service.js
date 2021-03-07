@@ -1,6 +1,5 @@
-import firebase from '../plugins/firebase'
+import { db } from '../plugins/firebase'
 
-const db = firebase.firestore()
 const bloqueiosRef = db.collection('bloqueios')
 const partesRef = db.collection('partes')
 
@@ -33,16 +32,17 @@ const getPartes = async () => {
 }
 
 const saveBloqueios = async (object) => {
-  const data = await bloqueiosRef.add(object)
-  console.log('data', data.get())
-  return
+  const { _id } = object
+
+  if (_id) {
+    return await bloqueiosRef.doc(_id).update(object)
+  } else {
+    const data = await bloqueiosRef.add(object)
+    return await bloqueiosRef.doc(data.id).set({ _id: data.id }, { merge: true })
+  }
 }
 
-const savePartes = async (object) => {
-  const data = await partesRef.add(object)
-  console.log('data', data.get())
-  return
-}
+const savePartes = async (nomeParte) => await partesRef.add({ nome: nomeParte })
 
 export default {
   getBloqueios,

@@ -151,7 +151,7 @@
             <v-spacer></v-spacer>
             <v-btn
               color="secondary"
-              @click="show = false"
+              @click="(show = false, reset())"
             >
               Fechar
             </v-btn>
@@ -176,46 +176,30 @@ export default {
   name: 'FormBloqueio',
 
   props: {
-    value: Boolean
+    value: Boolean,
+    data: {
+      type: Object,
+      default: () => { }
+    }
   },
 
   data: () => {
     return {
       valid: true,
-      // form: {
-      //   _id: null,
-      //   dataRequisicao: new Date().toISOString().substr(0, 10),
-      //   dataBloqueio: null,
-      //   numeroProtocolo: null,
-      //   numeroProcesso: null,
-      //   exequente: [],
-      //   executado: [],
-      //   status: 'Aguardando bloqueio', // Valor padrão inicial
-      //   valor: null
-      // }
-      form: {
+      formDefault: {
         _id: null,
         dataRequisicao: new Date().toISOString().substr(0, 10),
         dataBloqueio: null,
-        numeroProtocolo: '25502541360',
-        numeroProcesso: '0800250-15.2021.8.15.0521',
-        exequente: ['Alison da Silva Andrade'],
-        executado: ['Estado da Paraíba, Município de Guarabira'],
+        numeroProtocolo: null,
+        numeroProcesso: null,
+        exequente: [],
+        executado: [],
         status: 'Aguardando bloqueio', // Valor padrão inicial
-        valor: '5.254,00'
+        valor: null
       },
       partes: [],
       search: null
     }
-  },
-
-  watch: {
-    exequente (val) {
-      console.log('value', val)
-      if (val.length > 5) {
-        this.$nextTick(() => this.form.exequente.pop())
-      }
-    },
   },
 
   computed: {
@@ -226,7 +210,24 @@ export default {
       set (value) {
         this.$emit('input', value)
       }
+    },
+
+    form: {
+      get () {
+        return this.data ? this.data : this.formDefault
+      },
+      set (value) {
+        this.formDefault = value
+      }
     }
+  },
+
+  watch: {
+    exequente (val) {
+      if (val.length > 5) {
+        this.$nextTick(() => this.form.exequente.pop())
+      }
+    },
   },
 
   mounted () {
@@ -244,13 +245,35 @@ export default {
         return
       }
 
-      console.log(this.form.exequente)
-
       try {
-        // await bloqueioService.save({ ...this.form })
+        // Cadatra a parte exequente no BD apenas e ela não existir
+        this.form.exequente.forEach(async parte => {
+          if (!this.partes.includes(parte.toUpperCase())) {
+            await bloqueioService.savePartes(parte)
+          }
+        })
+
+        // Cadatra a parte executada no BD apenas e ela não existir
+        this.form.executado.forEach(async parte => {
+          if (!this.partes.includes(parte.toUpperCase())) {
+            await bloqueioService.savePartes(parte)
+          }
+        })
+
+        await bloqueioService.saveBloqueios({ ...this.form })
+
+        this.$emit('reload')
+
+        this.reset()
+
+        this.show = false
       } catch (error) {
         console.error(error)
       }
+    },
+
+    reset () {
+      this.$refs.form.reset()
     }
   }
 }
