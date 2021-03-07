@@ -32,7 +32,6 @@
         <v-list-item-group
           v-model="selected"
           active-class="pink--text"
-          multiple
         >
           <template v-for="(item, index) in filteredItems">
             <v-list-item
@@ -66,24 +65,26 @@
                   </v-chip>
                   <v-chip
                     class="ml-2 mt-1"
-                    color="info"
+                    :color="colorStatus(item.status)"
                     label
                     text-color="white"
                     small
                   >
-                    Aguardando ordem de bloqueio
+                    {{ item.status }}
                   </v-chip>
                 </v-list-item-subtitle>
               </v-list-item-content>
 
               <v-list-item-action>
                 <v-list-item-action-text>
-                  {{ item.dataRequisicao ? dayNow(item.dataRequisicao) : dayNow(item.dataBloqueio) }}
+                  {{ item.dataBloqueio ? dayNow(item.dataBloqueio) : dayNow(item.dataRequisicao) }}
                 </v-list-item-action-text>
 
-                <v-icon color="grey lighten-1">
-                  mdi-star-outline
-                </v-icon>
+                <MenuDrop
+                  :data="item"
+                  @reload="(init(), snackbar = true)"
+                />
+
               </v-list-item-action>
             </v-list-item>
 
@@ -183,7 +184,8 @@ export default {
   name: 'BloqueioList',
 
   components: {
-    FormBloqueio: () => import('@/components/FormBloqueio')
+    FormBloqueio: () => import('@/components/FormBloqueio'),
+    MenuDrop: () => import('@/components/MenuDrop')
   },
 
   data: () => ({
@@ -232,6 +234,18 @@ export default {
 
     clearSearch () {
       this.search = ''
+    },
+
+    colorStatus (status) {
+      if (status.toLowerCase().includes('aguardando')) {
+        return 'info'
+      }
+      if (status.toLowerCase().includes('integralmente')) {
+        return 'success'
+      }
+      if (status.toLowerCase().includes('parcialmente')) {
+        return 'warning'
+      }
     },
 
     editBloqueio (obj) {

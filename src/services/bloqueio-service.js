@@ -42,11 +42,19 @@ const saveBloqueios = async (object) => {
   }
 }
 
+const updateStatus = async ({_id, status}) => {
+  return await bloqueiosRef.doc(_id).set({ status }, { merge: true })
+}
+
+const deleteBloqueio = async (id) => await bloqueiosRef.doc(id).delete()
+
 const savePartes = async (nomeParte) => await partesRef.add({ nome: nomeParte })
 
 export default {
   getBloqueios,
   getPartes,
   saveBloqueios,
+  updateStatus,
+  deleteBloqueio,
   savePartes
 }
