@@ -1,17 +1,23 @@
 import { db } from '../plugins/firebase'
+import moment from 'moment'
 
 const bloqueiosRef = db.collection('bloqueios')
 const partesRef = db.collection('partes')
 
-const getBloqueios = async () => {  
+
+const getBloqueios = async (params) => {
+  const dataAtual = params || new Date().toISOString().substr(0, 7) // Mês da pesquisa ou mês atual
   let bloqueiosData = []
   const querySnapshot = await bloqueiosRef.get()
 
   querySnapshot.forEach(doc => {
-    bloqueiosData.push({
-      _id: doc.id,
-      ...doc.data()
-    })
+    const dataRequisicaoFormatada = doc.data().dataRequisicao.slice(0, 7)
+    if (moment(dataRequisicaoFormatada).isSame(dataAtual)) {
+      bloqueiosData.push({
+        _id: doc.id,
+        ...doc.data()
+      })
+    }
   })
 
   return bloqueiosData

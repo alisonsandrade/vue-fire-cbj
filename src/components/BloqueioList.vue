@@ -282,18 +282,12 @@ export default {
     },
 
     async init (params) {
-      const mesAtual = new Date().toISOString().substr(0, 7)
+      const mesAtual = params || new Date().toISOString().substr(0, 7)
 
       this.overlay = true
       try {
-        const data = await BloqueioService.getBloqueios()
-        const dataFilter = data.filter(item => {
-          const dataRequisicaoFormatada = item.dataRequisicao.slice(0, 7)
-          if (moment(dataRequisicaoFormatada).isSame(params || mesAtual)) {
-            return item
-          }
-        })
-        this.items = dataFilter
+        const data = await BloqueioService.getBloqueios(mesAtual)
+        this.items = data
         this.searchItem = this.items
       } catch (error) {
         console.log('error bloqueiolist', error)
