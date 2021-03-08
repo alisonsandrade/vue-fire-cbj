@@ -47,7 +47,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-badge
+      <!-- <v-badge
         bordered
         bottom
         color="green"
@@ -56,9 +56,10 @@
         offset-y="10"
       >
         <v-avatar size="40">
-          <v-img src="https://cdn.vuetifyjs.com/images/lists/2.jpg" />
+          <v-img :src="currentUser.photoURL || require('@/assets/perfil.png')" />
         </v-avatar>
-      </v-badge>
+      </v-badge> -->
+      <Avatar />
 
     </v-toolbar>
 
@@ -75,22 +76,30 @@
 </template>
 
 <script>
+import { auth } from '../plugins/firebase'
+
 export default {
   name: 'Layout',
 
   components: {
-    Sidebar: () => import('@/components/Sidebar')
+    Sidebar: () => import('@/components/Sidebar'),
+    Avatar: () => import('@/components/Profile')
   },
 
   data: () => ({
     tab: null,
-    drawer: false
+    drawer: false,
+    currentUser: ''
   }),
 
   watch: {
     $route (route) {
       this.tab = route.path === '/about' ? 1 : 0
     }
+  },
+
+  mounted () {
+    this.currentUser = auth.currentUser
   }
 
 }
