@@ -9,8 +9,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="fa-bitcoin.svg" alt="Logo" width="80" height="80">
+  <a href="https://github.com/alisonsandrade/vue-fire-cbj">
+    <img src="images/bitcoin.svg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">CBJ Controle de Bloqueios Judiciais</h3>
@@ -51,7 +51,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Sobre o Projeto
 
-[![Screenshot do Projeto][product-screenshot]](https://github.com/alisonsandrade/vue-fire-cbj/blob/main/images/screenshot_dashboard.png)
+![Screenshot do Projeto](https://github.com/alisonsandrade/vue-fire-cbj/blob/main/images/screenshot_dashboard.png)
 
 O CBJ é um software livre desenvolvido pensando em ajudar no controle dos bloqueio judiciais via SISBAJUD por parte dos juízes e assessores. Na prática forense, em muitos processos o poder Judiciário é obrigado a bloquear judicialmente numerário para pagamento das execuções que não são cumpridas voluntariamente. Esse bloqueio se dá por meio do sistema SISBAJUD.
 
@@ -64,23 +64,25 @@ Porque usar o CBJ?:
 
 
 ### Tecnologias
-
-O CBJ foi desenvolvido com Vue Framework e Firebase. No firebase optou-se pela utilização do Firestore para armazenamento do banco de dados e a autenticação por e-mail e senha.
+O CBJ foi desenvolvido com Vue Framework, VuetifyJS e Firebase. No firebase optou-se pela utilização do Firestore para armazenamento do banco de dados e a autenticação por e-mail e senha.
 * [VueJS](https://vuejs.org/)
 * [Firebase](https://firebase.google.com/?hl=pt-br)
+* [Vuetifyjs](https://vuetifyjs.com/en/)
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Iniciando o Projeto
 O CBJ utiliza apenas tecnologias livres o que permite que qualquer um tenha acesso ao sistema sem precisar de dispor de recursos financeiros para a sua manutenção.
 
-### Prerequisitos
 
+### Prerequisitos
 Os prerequisitos para instalação e utilização do CBJ são node.js, VueJS 2.x e Firebase.
 * npm
   ```sh
   npm install npm@latest -g
   ```
+* [VueJS](https://br.vuejs.org/v2/guide/installation.html)
+
 
 ## Instalação do projeto
 1. É necessário criar um banco de dados [Firestore da Firebase] (https://console.firebase.google.com/u/0/?hl=pt-br) e preencher as variáveis de ambiente com as configurações do seu projeto Firebase. Para isso renomeie o arquivo .env_example para .env
@@ -109,6 +111,7 @@ yarn build
 ```
 yarn lint
 ```
+
 
 <!-- CONTRIBUTING -->
 ## Contribuindo
@@ -139,19 +142,16 @@ Link do Projeto: [https://github.com/alisonsandrade/vue-fire-cbj](https://github
 
 <!-- TELAS DO SISTEMA -->
 ## Telas do Sistema
+![Formulário de cadastro](images/form_cadastro.png)
 
-[![Formulário de cadastro][form-cadastro]](https://github.com/alisonsandrade/vue-fire-cbj/blob/main/images/form_cadastro.png)
-
-[![Perfil do usuário][perfil-usuario]](https://github.com/alisonsandrade/vue-fire-cbj/blob/main/images/perfil.png)
-
-
+![Perfil do usuário](https://github.com/alisonsandrade/vue-fire-cbj/blob/main/images/perfil.png)
 
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/vue-fire-cbj/graphs/contributors
+[contributors-url]: https://github.com/alisonsandrade/vue-fire-cbj/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
 [forks-url]: https://github.com/alisonsandrade/vue-fire-cbj/network/members
 [stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
