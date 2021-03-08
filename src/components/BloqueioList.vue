@@ -22,7 +22,7 @@
 
         <v-btn
           icon
-          @click="dialog = true"
+          @click="addBloqueio"
         >
           <v-icon>mdi-plus-box-multiple</v-icon>
         </v-btn>
@@ -73,7 +73,7 @@
 
             <v-list-item-action>
               <v-list-item-action-text>
-                {{ item.dataBloqueio ? dayNow(item.dataBloqueio) : dayNow(item.dataRequisicao) }}
+                {{ dayNow(item.dataRequisicao) }}
               </v-list-item-action-text>
 
               <MenuDrop
@@ -198,7 +198,18 @@ export default {
     overlay: false,
     snackbar: false,
     text: 'Registro salvo com sucesso',
-    objBloqueio: { status: 'Aguardando bloqueio ' }
+    // objBloqueio: { status: 'Aguardando bloqueio ' }
+    objBloqueio: {
+      _id: null,
+      dataRequisicao: new Date().toISOString().substr(0, 10),
+      dataBloqueio: null,
+      numeroProtocolo: null,
+      numeroProcesso: null,
+      exequente: [],
+      executado: [],
+      status: 'Aguardando Bloqueio', // Valor padrão inicial
+      valor: null
+    }
   }),
 
   created () {
@@ -266,15 +277,26 @@ export default {
     },
 
     colorStatus (status) {
-      if (status.toLowerCase().includes('aguardando')) {
-        return 'info'
+      let returnValue
+      switch (status) {
+        case 'Bloqueado Integralmente':
+          returnValue = 'success'
+          break
+        case 'Bloqueado Parcialmente':
+          returnValue = 'warning'
+          break
+        case 'Penhora Negativa':
+          returnValue = 'secondary'
+          break
+        default:
+          returnValue = 'primary'
       }
-      if (status.toLowerCase().includes('integralmente')) {
-        return 'success'
-      }
-      if (status.toLowerCase().includes('parcialmente')) {
-        return 'warning'
-      }
+      return returnValue
+    },
+
+    addBloqueio () {
+      this.objBloqueio = Object.assign({}, this.$options.data().objBloqueio) // Adiciona um objeto em branco
+      this.dialog = true
     },
 
     editBloqueio (obj) {

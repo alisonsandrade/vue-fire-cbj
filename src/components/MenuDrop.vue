@@ -50,6 +50,7 @@ export default {
     items: [
       { title: 'Bloqueado Integralmente', icon: 'mdi-check-all', method: vm.updateStatus },
       { title: 'Bloqueado Parcialmente', icon: 'mdi-check', method: vm.updateStatus },
+      { title: 'Penhora Negativa', icon: 'mdi-close-octagon-outline', method: vm.updateStatus },
       { title: 'Excluir', icon: 'mdi-delete', method: vm.deleteBloqueio }
     ]
   }),
@@ -61,7 +62,7 @@ export default {
       try {
         await bloqueioService.saveBloqueios({
           _id: this.data._id,
-          dataBloqueio: new Date().toISOString().substr(0, 10),
+          dataBloqueio: status !== 'Penhora Negativa' ? new Date().toISOString().substr(0, 10) : null,
           status
         })
         this.$emit('reload')

@@ -2,9 +2,9 @@
   <div class="about">
     <h1 class="headline text-center pa-4">CBJ - Controle de Bloqueios Judiciais</h1>
     <p class="text-justify">
-      O CBJ é um software livre desenvolvido pensando em ajudar o controle dos bloqueio judiciais via SISBAJUD
+      O CBJ é um software livre desenvolvido pensando em ajudar no controle dos bloqueio judiciais, via SISBAJUD,
       por parte dos juízes e assessores.
-      Na prática forense, em muitos processos o poder Judiciário é obrigado a bloquear judicialmente numerário
+      Na prática forense, em muitos processos, o Poder Judiciário é obrigado a bloquear judicialmente numerário
       para pagamento das execuções que não são cumpridas voluntariamente. Esse bloqueio se dá por meio do sistema
       SISBAJUD.
     </p>

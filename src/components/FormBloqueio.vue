@@ -31,7 +31,7 @@
                     label="Data da Requisição"
                     :rules="[v => !!v || 'Campo obrigatório']"
                     required
-                    hide-details="valid"
+                    :hide-details="valid"
                   ></v-text-field>
                 </v-col>
 
@@ -113,7 +113,6 @@
                     small-chips
                     :hide-details="valid"
                     :rules="[
-                      v => !!v || 'Campo obrigatório',
                       v => v.length > 0 || 'Campo obrigatório'
                     ]"
                   >
@@ -194,7 +193,7 @@ export default {
         numeroProcesso: null,
         exequente: [],
         executado: [],
-        status: 'Aguardando bloqueio', // Valor padrão inicial
+        status: 'Aguardando Bloqueio', // Valor padrão inicial
         valor: null
       },
       partes: [],
@@ -214,7 +213,10 @@ export default {
 
     form: {
       get () {
-        return this.data ? this.data : this.formDefault
+        if (this.data._id) {
+          return Object.assign({}, this.data)
+        }
+        return this.formDefault
       },
       set (value) {
         this.formDefault = value

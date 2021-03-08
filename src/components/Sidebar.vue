@@ -91,7 +91,10 @@ export default {
   },
 
   watch: {
-    picker (value) {
+    async picker (value) {
+      if (this.$route.path !== '/home') {
+        await this.$router.push('/home')
+      }
       this.$eventBus.$emit('month', value)
     }
   },
