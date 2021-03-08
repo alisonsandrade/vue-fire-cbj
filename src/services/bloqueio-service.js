@@ -8,7 +8,7 @@ const partesRef = db.collection('partes')
 const getBloqueios = async (params) => {
   const dataAtual = params || new Date().toISOString().substr(0, 7) // Mês da pesquisa ou mês atual
   let bloqueiosData = []
-  const querySnapshot = await bloqueiosRef.get()
+  const querySnapshot = await bloqueiosRef.orderBy('dataRequisicao', 'desc').get()
 
   querySnapshot.forEach(doc => {
     const dataRequisicaoFormatada = doc.data().dataRequisicao.slice(0, 7)
@@ -25,7 +25,7 @@ const getBloqueios = async (params) => {
 
 const getPartes = async () => {  
   let partesData = []
-  const querySnapshot = await partesRef.get()
+  const querySnapshot = await partesRef.orderBy('nome').get()
 
   querySnapshot.forEach(doc => {
     partesData.push({
