@@ -36,7 +36,7 @@
           >
             <v-list-item-content>
               <v-list-item-title>
-                <span v-if="item.exequente">
+                <span v-if="item.exequente.length > 0">
                   {{ item.exequente.join(', ') }} x
                 </span>
                 <span>
@@ -193,12 +193,10 @@ export default {
   data: () => ({
     search: '',
     searchItem: [],
-    itemsLocal: [],
     dialog: false,
     overlay: false,
     snackbar: false,
     text: 'Registro salvo com sucesso',
-    // objBloqueio: { status: 'Aguardando bloqueio ' }
     objBloqueio: {
       _id: null,
       dataRequisicao: new Date().toISOString().substr(0, 10),
@@ -221,10 +219,10 @@ export default {
   computed: {
     items: {
       get () {
-        return this.itemsLocal
+        return this.searchItem
       },
       set (value) {
-        if (value) this.itemsLocal = value
+        if (value) this.searchItem = value
       }
     },
 
