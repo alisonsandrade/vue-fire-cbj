@@ -45,7 +45,10 @@
 
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn block>
+        <v-btn
+          block
+          @click="logout"
+        >
           Sair
         </v-btn>
       </div>
@@ -54,6 +57,8 @@
 </template>
 
 <script>
+import { auth } from '../plugins/firebase'
+
 export default {
   name: 'Sidebar',
 
@@ -88,6 +93,18 @@ export default {
   watch: {
     picker (value) {
       this.$eventBus.$emit('month', value)
+    }
+  },
+
+  methods: {
+    async logout () {
+      if (!window.confirm('Tem certeza que deseja sair?')) return
+      try {
+        await auth.signOut()
+        this.$router.push('/login')
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
