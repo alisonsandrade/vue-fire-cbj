@@ -47,18 +47,6 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-badge
-        bordered
-        bottom
-        color="green"
-        dot
-        offset-x="10"
-        offset-y="10"
-      >
-        <v-avatar size="40">
-          <v-img :src="currentUser.photoURL || require('@/assets/perfil.png')" />
-        </v-avatar>
-      </v-badge> -->
       <Avatar />
 
     </v-toolbar>

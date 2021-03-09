@@ -12,8 +12,11 @@
         class="text-capitalize"
         align="center"
       >
-        <v-icon size="60">mdi-bitcoin</v-icon><br>CBJ
+        <v-icon size="60">mdi-bitcoin</v-icon>
+        <h1 class="headline">CBJ</h1>
+        <span class="subtitle-1">{{ tenant }}</span>
       </v-list-item-title>
+
     </v-list-item>
     <v-list>
       <v-list-item
@@ -57,7 +60,7 @@
 </template>
 
 <script>
-import { auth } from '../plugins/firebase'
+import { auth, db } from '../plugins/firebase'
 
 export default {
   name: 'Sidebar',
@@ -76,6 +79,7 @@ export default {
         { title: 'Perfil', icon: 'mdi-account-box', link: '/perfil' },
         { title: 'Sobre', icon: 'mdi-chat-alert-outline', link: '/about' }
       ],
+      tenant: ''
     }
   },
 
@@ -90,6 +94,10 @@ export default {
     }
   },
 
+  mounted () {
+    this.onInit()
+  },
+
   watch: {
     async picker (value) {
       if (this.$route.path !== '/home') {
@@ -100,6 +108,19 @@ export default {
   },
 
   methods: {
+    async onInit () {
+      try {
+        const snapShot = await db.collection('users').get()
+        snapShot.forEach(doc => {
+          if (doc.id === auth.currentUser.uid) {
+            this.tenant = doc.data().tenant
+          }
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
     async logout () {
       if (!window.confirm('Tem certeza que deseja sair?')) return
       try {

@@ -249,13 +249,16 @@ export default {
     },
 
     filteredItems () {
-      return this.searchItem.filter((item) => {
-        return item.exequente.join(', ').toLowerCase().match(this.search) ||
-          item.executado.join(', ').toLowerCase().match(this.search) ||
-          item.numeroProcesso.toLowerCase().match(this.search) ||
-          item.numeroProtocolo.toLowerCase().match(this.search) ||
-          item.status.toLowerCase().match(this.search)
-      })
+      if (this.search && this.search !== '') {
+        return this.searchItem.filter((item) => {
+          return item.exequente.join(', ').toLowerCase().match(this.search) ||
+            item.executado.join(', ').toLowerCase().match(this.search) ||
+            item.numeroProcesso.toLowerCase().match(this.search) ||
+            item.numeroProtocolo.toLowerCase().match(this.search) ||
+            item.status.toLowerCase().match(this.search)
+        })
+      }
+      return this.items
     }
   },
 
