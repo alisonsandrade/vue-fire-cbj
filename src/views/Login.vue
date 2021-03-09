@@ -19,7 +19,7 @@
       <v-card>
         <v-alert
           v-model="alert"
-          type="error"
+          :type="typeAlert"
           dismissible
           class="ma-4"
         >
@@ -53,14 +53,26 @@
                 counter
                 required
               ></v-text-field>
-              <v-layout justify-space-between>
+              <!-- <v-layout justify-space-between>
                 <v-btn
                   @click="login"
                   class="primary"
                   :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
                 >Entrar</v-btn>
                 <a href="">Esqueci minha senha</a>
-              </v-layout>
+              </v-layout> -->
+              <div class="text-center">
+                <v-btn
+                  @click="login"
+                  class="primary mb-2"
+                  block
+                  :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
+                >Entrar</v-btn>
+                <a
+                  href="#"
+                  @click="forgoted"
+                >Esqueci minha senha</a>
+              </div>
             </v-form>
           </div>
         </v-card-text>
@@ -79,6 +91,7 @@ export default {
     return {
       alert: false,
       alertText: 'Ocorreu um erro',
+      typeAlert: 'error',
       overlay: false,
       valid: false,
       e1: false,
@@ -111,6 +124,27 @@ export default {
         }
       }
     },
+
+    async forgoted () {
+      if (!this.email) {
+        this.alert = true
+        this.alertText = 'Para redefinir a senha é necessário informar o e-mail'
+        return
+      }
+
+      try {
+        this.overlay = true
+        await auth.sendPasswordResetEmail(this.email)
+        this.typeAlert = 'success'
+        this.alertText = 'Em alguns instante será encaminhado um e-mail para sua caixa de entrada para redefinir a sua senha.'
+      } catch (error) {
+        this.alertText = error.messsage
+      } finally {
+        this.overlay = false
+        this.alert = true
+      }
+    },
+
     clear () {
       this.$refs.form.reset()
     }

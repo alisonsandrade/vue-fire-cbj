@@ -37,6 +37,7 @@
       <ul>
         <li><a href="#prerequisitos">Prerequisitos</a></li>
         <li><a href="#instalacao">Instalação</a></li>
+        <li><a href="#configuracoes-do-banco-de-dados">Configurações do Banco de Dados</a></li>        
       </ul>
     </li>    
     <li><a href="#contribuindo">Contribuindo</a></li>
@@ -112,7 +113,7 @@ yarn build
 yarn lint
 ```
 
-4. Configurações do Banco de Dados
+## Configurações do Banco de Dados
 O projeto utiliza o Firebase como base de dados e suas coleções foram projetadas de forma a suportar o acesso via multi tenant. Dada a simplicidade do sistema e o objetivo que se pretende alcançar, para que funcione o multi tenant se faz necessária algumas configurações manuais no **Cloud Firestore**.
 São necessárias as criações manuais de duas coleções na raiz do Cloud Firestore. 
 ```tenant``` e ```users```
@@ -124,6 +125,7 @@ Por fim, se faz necessária mais uma configuração manual quanto aos usuários.
 * name (o mesmo cadastrado no Authentication)
 * tenant (o nome do tenant ao qual o usuário estará vinculado)
 * tenantId (o id do tenant ao qual o usuário estará vinculado)
+
 ![Collection Users](images/collection-users.png)
 
 
