@@ -192,7 +192,7 @@ export default {
 
   data: () => ({
     search: '',
-    searchItem: [],
+    items: [],
     dialog: false,
     overlay: false,
     snackbar: false,
@@ -217,13 +217,18 @@ export default {
   },
 
   computed: {
-    items: {
-      get () {
-        return this.searchItem
-      },
-      set (value) {
-        if (value) this.searchItem = value
+    filteredItems () {
+      if (!this.search) {
+        return this.items
       }
+
+      return this.items.filter((item) => {
+        return item.exequente.join(', ').toLowerCase().indexOf(this.search.toLowerCase()) !== -1 ||
+          item.executado.join(', ').toLowerCase().indexOf(this.search.toLowerCase()) !== -1 ||
+          item.numeroProcesso.toLowerCase().indexOf(this.search.toLowerCase()) !== -1 ||
+          item.numeroProtocolo.toLowerCase().indexOf(this.search.toLowerCase()) !== -1 ||
+          item.status.toLowerCase().indexOf(this.search.toLowerCase()) !== -1
+      })
     },
 
     totalRequisitado () {
@@ -246,19 +251,6 @@ export default {
       }, 0)
 
       return total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-    },
-
-    filteredItems () {
-      if (this.search && this.search !== '') {
-        return this.searchItem.filter((item) => {
-          return item.exequente.join(', ').toLowerCase().match(this.search) ||
-            item.executado.join(', ').toLowerCase().match(this.search) ||
-            item.numeroProcesso.toLowerCase().match(this.search) ||
-            item.numeroProtocolo.toLowerCase().match(this.search) ||
-            item.status.toLowerCase().match(this.search)
-        })
-      }
-      return this.items
     }
   },
 
@@ -312,7 +304,6 @@ export default {
       try {
         const data = await BloqueioService.getBloqueios(mesAtual)
         this.items = data
-        this.searchItem = this.items
       } catch (error) {
         console.log('error bloqueiolist', error)
       } finally {
