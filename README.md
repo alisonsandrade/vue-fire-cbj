@@ -112,6 +112,21 @@ yarn build
 yarn lint
 ```
 
+4. Configurações do Banco de Dados
+O projeto utiliza o Firebase como base de dados e suas coleções foram projetadas de forma a suportar o acesso via multi tenant. Dada a simplicidade do sistema e o objetivo que se pretende alcançar, para que funcione o multi tenant se faz necessária algumas configurações manuais no **Cloud Firestore**.
+São necessárias as criações manuais de duas coleções na raiz do Cloud Firestore. 
+```tenant``` e ```users```
+Na coleção tenant é onde se abrigará as informações da unidade judiciária que armazenará a coleção de bloqueios judiciais. É campo obrigatório dessa coleção o **name**.
+![Collection Tenant](images/collection-tenant.png)
+
+Por fim, se faz necessária mais uma configuração manual quanto aos usuários. A collection **users** deverá possuir todos os usuários do sistema. Em seu id deverá ser adicionado o **uid** do usuário cadastrado no **Authentication**. Como campos obrigatórios da coleção deverá conter:
+* e-mail (o mesmo cadastrado no Authentication)
+* name (o mesmo cadastrado no Authentication)
+* tenant (o nome do tenant ao qual o usuário estará vinculado)
+* tenantId (o id do tenant ao qual o usuário estará vinculado)
+![Collection Users](images/collection-users.png)
+
+
 
 <!-- CONTRIBUTING -->
 ## Contribuindo
