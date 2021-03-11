@@ -60,6 +60,14 @@
       >
         Atualizar perfil
       </v-btn>
+
+      <v-btn
+        color="secondary"
+        class="mr-4"
+        @click="changePassword"
+      >
+        Alterar a senha
+      </v-btn>
     </v-form>
 
     <v-snackbar
@@ -151,6 +159,23 @@ export default {
       } finally {
         this.overlay = false
       }
+    },
+
+    async changePassword () {
+      if (this.user.email != null) {
+        try {
+          this.overlay = true
+          await auth.sendPasswordResetEmail(this.user.email)
+          this.snackbar = true
+          this.snackbarMessage = `Foi encaminhado um e-mail para ${this.user.email} para redefinição de sua senha. Siga os procedimentos para alteração de sua senha.`
+        } catch (error) {
+          this.snackbar = true
+          this.snackbarMessage = error.message
+        } finally {
+          this.overlay = false
+        }
+      }
+
     }
   }
 }
