@@ -52,15 +52,8 @@
                 :rules="passwordRules"
                 counter
                 required
+                @keyup.enter="login"
               ></v-text-field>
-              <!-- <v-layout justify-space-between>
-                <v-btn
-                  @click="login"
-                  class="primary"
-                  :class=" { 'blue darken-4 white--text' : valid, disabled: !valid }"
-                >Entrar</v-btn>
-                <a href="">Esqueci minha senha</a>
-              </v-layout> -->
               <div class="text-center">
                 <v-btn
                   @click="login"

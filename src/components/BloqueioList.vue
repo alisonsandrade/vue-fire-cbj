@@ -131,14 +131,19 @@
                 <v-list-item-content>
 
                   <v-list-item-title class="title mb-1 white--text">
-                    Total Requisitado
+                    Pendente de Bloqueio
                   </v-list-item-title>
-                  <v-list-item-subtitle class="white--text">{{ totalRequisitado }}</v-list-item-subtitle>
+                  <v-list-item-subtitle class="white--text">{{ totalPendenteBloqueio }}</v-list-item-subtitle>
 
                   <v-list-item-title class="title mb-1 mt-2 white--text">
-                    Total Bloqueado
+                    Requisições Bloqueadas
                   </v-list-item-title>
                   <v-list-item-subtitle class="white--text">{{ totalBloqueado }}</v-list-item-subtitle>
+
+                  <v-list-item-title class="title mt-6 secondary--text">
+                    Total*: {{ totalRequisitado }}
+                  </v-list-item-title>
+                  <small>*Incluem todos os valores, inclusives as penhoras negativas.</small>
                 </v-list-item-content>
               </v-list-item>
             </v-card-text>
@@ -231,7 +236,7 @@ export default {
       })
     },
 
-    totalRequisitado () {
+    totalPendenteBloqueio () {
       const total = this.filteredItems.reduce((acc, currentValue) => {
         if (currentValue.status.toLowerCase().includes('aguardando')) {
           acc = acc + this.formatValor(currentValue.valor)
@@ -247,6 +252,15 @@ export default {
         if (currentValue.status.toLowerCase().includes('bloqueado')) {
           acc = acc + this.formatValor(currentValue.valor)
         }
+        return acc
+      }, 0)
+
+      return total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+    },
+
+    totalRequisitado () {
+      const total = this.filteredItems.reduce((acc, currentValue) => {
+        acc = acc + this.formatValor(currentValue.valor)
         return acc
       }, 0)
 
