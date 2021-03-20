@@ -143,7 +143,7 @@
                   <v-list-item-title class="title mt-6 secondary--text">
                     Total*: {{ totalRequisitado }}
                   </v-list-item-title>
-                  <small>*Incluem todos os valores, inclusives as penhoras negativas.</small>
+                  <small>*Incluem todos os valores, inclusive as penhoras negativas.</small>
                 </v-list-item-content>
               </v-list-item>
             </v-card-text>
